@@ -1,0 +1,47 @@
+//            System.out.println("Enter 8 if you want to upload game to file" );
+//            System.out.println("Enter 9 if you want to download game from file" );
+
+//            else if (choice == 8) {
+//                string path;
+//                cout << "Enter path: ";
+//                cin >> path;
+//                try {
+//                    Game::writeIntoFile(game, path);
+//                }
+//                catch (const char* msg) {
+//                    cout << msg;
+//                }
+//                cout << "Game has been written to file successfully";
+//            }
+//            else if (choice == 9) {
+//                int num;
+//                string path;
+//                cout << "Be sure to write into file current game!" << endl;
+//                cout << "Are you want to save this game?" << endl;
+//                cout << "Enter number (1 - save || 0 - continue): " << endl;
+//                cin >> num;
+//                if (num == 1) {
+//                    cout << "Enter path: ";
+//                    cin >> path;
+//                    try {
+//                        Game::writeIntoFile(game, path);
+//                    }
+//                    catch (const char* msg) {
+//                        cout << msg;
+//                    }
+//                    cout << "Game has been written to file successfully" << endl;
+//                }
+//                else {
+//                    game.restart();
+//                }
+//                cout << "Enter path: ";
+//                cin >> path;
+//                try {
+//                    game = Game::loadFromFile(path);
+//                    cout << "Game has been downloaded successfully!";
+//                }
+//                catch (const char* msg) {
+//                    cout << msg;
+//                }
+//
+//            }
