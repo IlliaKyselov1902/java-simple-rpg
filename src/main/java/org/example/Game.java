@@ -19,7 +19,6 @@ public class Game {
              else
                   army1.removeFirst();
          }
-         //Якщо друга армія пуста - true і навпаки
          return !army1.getTroops().isEmpty();
      }
 

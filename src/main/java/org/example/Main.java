@@ -15,42 +15,55 @@ public class Main {
 
             try {
                 System.out.println("""
-            Enter 1 if you want to get information about KNIGHT
-            Enter 2 if you want to get information about DEFENDER
-            Enter 3 if you want to get information about MAGICIAN
-            Enter 4 if you want to get information about VAMPIRE
-            Enter 5 if you want to get information about BERSERK    
-            Enter 6 if you want to get information about game configuration
-            Enter 7 if you want to supply army
-            Enter 8 if you want to !!!BATTLE!!!
-            Enter 9 if you want to restart game
-            Enter 0 if you want to leave the game
-            Enter a number:
-            """);
+                    Enter 1 if you want to get information about KNIGHT 
+                    Enter 2 if you want to get information about game configuration
+                    Enter 3 if you want to supply army
+                    Enter 4 if you want to !!!BATTLE!!!
+                    Enter 5 if you want to restart game
+                    Enter 6 if you want to leave the game
+                    Enter a number:
+                    """);
 
                 choice = in.nextInt();
 
                 if (choice == 1) {
-                    Knight.printInfo();
+                    int warriorType = 0;
+                    System.out.println("""
+                        Enter 1 if you want to get information about KNIGHT
+                        Enter 2 if you want to get information about DEFENDER
+                        Enter 3 if you want to get information about MAGICIAN
+                        Enter 4 if you want to get information about VAMPIRE
+                        Enter 5 if you want to get information about BERSERK   
+                        """);
+                    System.out.println("Enter the warrior type, you want to get info about: ");
+                    do {
+                        try {
+                            warriorType = in.nextInt();
+                            if (warriorType == 1) {
+                                Knight.printInfo();
+                            }
+                            else if (warriorType == 2) {
+                                Defender.printInfo();
+                            }
+                            else if (warriorType == 3) {
+                                Magician.printInfo();
+                            }
+                            else if (warriorType == 4) {
+                                Vampire.printInfo();
+                            }
+                            else if (warriorType == 5) {
+                                Berserk.printInfo();
+                            }
+                            else {
+                                throw new IncorrectInputException("Incorrect input! Please, enter number between 1 and 5!");
+                            }
+                        }
+                        catch (IncorrectInputException e) {
+                                System.out.println(e.getMessage());
+                        }
+                    } while (warriorType < 1 || warriorType > 5);
                 }
-
                 else if (choice == 2) {
-                    Defender.printInfo();
-                }
-
-                else if (choice == 3) {
-                    Magician.printInfo();
-                }
-
-                else if (choice == 4) {
-                    Vampire.printInfo();
-                }
-
-                else if (choice == 5) {
-                    Berserk.printInfo();
-                }
-
-                else if (choice == 6) {
                     int army = 0;
                     do {
                         System.out.println("Enter the army, you want to get info about: ");
@@ -74,17 +87,17 @@ public class Main {
                     } while (army != 1 && army != 2);
                 }
 
-                else if (choice == 7) {
+                else if (choice == 3) {
                     int army = 0, type = 0, quantity = 0;
 
                     do {
                         System.out.println("""
-                    Enter 1 if you want to add KNIGHT
-                    Enter 2 if you want to add DEFENDER
-                    Enter 3 if you want to add MAGICIAN
-                    Enter 4 if you want to add VAMPIRE
-                    Enter 5 if you want to add BERSERK
-                    Enter type of warrior: """);
+                            Enter 1 if you want to add KNIGHT
+                            Enter 2 if you want to add DEFENDER
+                            Enter 3 if you want to add MAGICIAN
+                            Enter 4 if you want to add VAMPIRE
+                            Enter 5 if you want to add BERSERK
+                            Enter type of warrior: """);
                         try {
                             type = in.nextInt();
                             if (type > 5 || type < 1)
@@ -126,7 +139,7 @@ public class Main {
                     System.out.println("Warriors has been successfully added to army!");
                 }
 
-                else if (choice == 8) {
+                else if (choice == 4) {
                     if (game.getArmy1().getTroops().isEmpty() && game.getArmy2().getTroops().isEmpty())
                         System.out.println("Draw!");
                     else if (game.Battle())
@@ -135,7 +148,7 @@ public class Main {
                         System.out.println("Second army has won the battle!");
                 }
 
-                else if (choice == 9) {
+                else if (choice == 5) {
                     game.restart();
                     System.out.println("Game has been restarted!");
                 }
