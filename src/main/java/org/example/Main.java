@@ -3,6 +3,11 @@ package org.example;
 import org.example.exception.IncorrectInputException;
 import org.example.warrior.*;
 
+import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.List;
 import java.util.Scanner;
 
 public class Main {
@@ -14,13 +19,15 @@ public class Main {
         do {
 
             try {
-                System.out.println("""
+                System.out.print("""
                     Enter 1 if you want to get information about KNIGHT 
                     Enter 2 if you want to get information about game configuration
                     Enter 3 if you want to supply army
                     Enter 4 if you want to !!!BATTLE!!!
                     Enter 5 if you want to restart game
-                    Enter 6 if you want to leave the game
+                    Enter 6 to upload the configuration into file
+                    Enter 7 to download the configuration from file
+                    Enter 0 if you want to leave the game
                     Enter a number:
                     """);
 
@@ -35,7 +42,7 @@ public class Main {
                         Enter 4 if you want to get information about VAMPIRE
                         Enter 5 if you want to get information about BERSERK   
                         """);
-                    System.out.println("Enter the warrior type, you want to get info about: ");
+                    System.out.print("Enter the warrior type, you want to get info about: ");
                     do {
                         try {
                             warriorType = in.nextInt();
@@ -66,7 +73,7 @@ public class Main {
                 else if (choice == 2) {
                     int army = 0;
                     do {
-                        System.out.println("Enter the army, you want to get info about: ");
+                        System.out.print("Enter the army, you want to get info about: ");
                         try {
                             army = in.nextInt();
                             if (army == 1){
@@ -91,7 +98,7 @@ public class Main {
                     int army = 0, type = 0, quantity = 0;
 
                     do {
-                        System.out.println("""
+                        System.out.print("""
                             Enter 1 if you want to add KNIGHT
                             Enter 2 if you want to add DEFENDER
                             Enter 3 if you want to add MAGICIAN
@@ -153,6 +160,95 @@ public class Main {
                     System.out.println("Game has been restarted!");
                 }
 
+                else if (choice == 6) {
+                    String configPath;
+                    System.out.println("Enter the name of the configuration you want to upload the game into: ");
+                    Scanner pathScanner = new Scanner(System.in);
+                    configPath = pathScanner.nextLine();
+                    File directory = new File(configPath);
+                    directory.mkdir();
+
+                    try (ObjectOutputStream outputStream = new ObjectOutputStream(
+                            new FileOutputStream(configPath + "\\_army_1.txt"))) {
+                        outputStream.writeObject(game.getArmy1().getTroops());
+                    }
+                    catch (FileNotFoundException exception) {
+                        System.out.println("File not found!");
+                    }
+                    catch (IOException exception) {
+                        System.out.println("Exception occured while recording into the file");
+                    }
+
+                    try (ObjectOutputStream outputStream = new ObjectOutputStream(
+                            new FileOutputStream(configPath + "\\_army_2.txt"))) {
+                        outputStream.writeObject(game.getArmy2().getTroops());
+                    }
+                    catch (FileNotFoundException exception) {
+                        System.out.println("File not found!");
+                    }
+                    catch (IOException exception) {
+                        System.out.println("Exception occured while recording into the file");
+                    }
+                }
+
+                else if (choice == 7) {
+                    int confirm = 0;
+                    String configPath;
+                    do {
+                        try {
+                            System.out.println("""
+                                    Your current game could be lost! 
+                                    Do you want still to download game configuration from the file?
+                                    Yes - 1
+                                    No - 0
+                                    """);
+                            confirm = in.nextInt();
+                            if (confirm == 1) {
+                                Scanner pathScanner = new Scanner(System.in);
+                                System.out.println("Enter the name of the configuration you want to upload the game into: ");
+                                configPath = pathScanner.nextLine();
+                                Path dir = Paths.get(configPath);
+                                if (!Files.isDirectory(dir) || !Files.exists(dir)) {
+                                    throw new IncorrectInputException("Game config with such name do not exist");
+                                }
+                                try (ObjectInputStream inputStream = new ObjectInputStream(
+                                        new FileInputStream(configPath + "\\_army_1.txt"))) {
+                                    game.getArmy1().setTroops((List<Warrior>)inputStream.readObject());
+                                }
+                                catch (FileNotFoundException e) {
+                                    System.out.println("File not found!");
+                                }
+                                catch (IOException e) {
+                                    System.out.println("Exception occurred while reading from the file");
+                                } catch (ClassNotFoundException e) {
+                                    System.out.println("Class not found");
+                                }
+
+                                try (ObjectInputStream inputStream = new ObjectInputStream(
+                                        new FileInputStream(configPath + "\\_army_2.txt"))) {
+                                    game.getArmy2().setTroops((List<Warrior>)inputStream.readObject());
+                                }
+                                catch (FileNotFoundException e) {
+                                    System.out.println("File not found!");
+                                }
+                                catch (IOException e) {
+                                    System.out.println("Exception occurred while reading from the file");
+                                } catch (ClassNotFoundException e) {
+                                    System.out.println("Class not found");
+                                }
+                            }
+                            else if (confirm == 0) {
+                            }
+                            else {
+                                throw new IncorrectInputException("You should enter 1 or 0!");
+                            }
+                        }
+                        catch (IncorrectInputException exception) {
+                            System.out.println(exception.getMessage());
+                        }
+                    } while (confirm != 1 && confirm != 0);
+                }
+
                 else {
                     throw new IncorrectInputException("Invalid operation");
                 }
@@ -160,7 +256,6 @@ public class Main {
             catch (IncorrectInputException e) {
                 System.out.println(e.getMessage());
             }
-
 
         } while (choice != 0);
 
